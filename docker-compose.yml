@@ -1,0 +1,28 @@
+version: '3'
+
+services:
+  mj-db:
+    image: postgres:14
+    container_name: mj_db
+    volumes:
+      - ./db/data:/var/lib/postgresql/data
+    environment:
+      - POSTGRES_USER=mj
+      - POSTGRES_PASSWORD=1234
+      - POSTGRES_DB=mjdb
+    restart: always
+    ports:
+      - "5450:5432"
+
+  mj-api:
+    build:
+      context: ./
+      dockerfile: Dockerfile
+    container_name: mj_api
+    volumes:
+      - ./app:/app
+    ports:
+      - 4000:80
+    depends_on:
+      - mj-db
+
